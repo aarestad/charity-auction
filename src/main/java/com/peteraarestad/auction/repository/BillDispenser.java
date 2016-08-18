@@ -1,15 +1,14 @@
 package com.peteraarestad.auction.repository;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import java.util.*;
 
-import static com.google.common.collect.Lists.newArrayList;
-
 public class BillDispenser {
     private final Map<Integer, Integer> billInventory = new HashMap<>();
 
-    public static final List<Integer> BILL_DENOMINATIONS = newArrayList(1, 5, 10, 20, 100);
+    public static final ImmutableList<Integer> BILL_DENOMINATIONS = ImmutableList.of(1, 5, 10, 20, 100);
 
     private static final int INITIAL_INVENTORY = 10;
 
