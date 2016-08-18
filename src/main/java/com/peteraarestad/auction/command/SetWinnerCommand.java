@@ -6,6 +6,10 @@ import com.peteraarestad.auction.repository.BillDispenser;
 
 import java.util.List;
 
+/**
+ * A Command to set the winning item. Returns an error message if the item number was invalid, or the
+ * current state of the dispenser and manager if successful.
+ */
 public class SetWinnerCommand implements Command {
     private BillDispenser billDispenser;
     private AuctionItemManager auctionItemManager;

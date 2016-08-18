@@ -5,6 +5,9 @@ import com.peteraarestad.auction.repository.BillDispenser;
 
 import java.util.List;
 
+/**
+ * A Command the restocks the bill dispenser. Returns the current state of the dispenser and manager.
+ */
 public class RestockCommand implements Command {
     private BillDispenser billDispenser;
     private AuctionItemManager auctionItemManager;

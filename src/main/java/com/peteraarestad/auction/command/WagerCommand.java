@@ -9,6 +9,18 @@ import java.util.SortedMap;
 
 import static com.peteraarestad.auction.repository.BillDispenser.BILL_DENOMINATIONS;
 
+/**
+ * A Command to make a bet. On success, returns a payout message indicating the bills paid out and the new state of the
+ * bill dispenser and item manager.
+ *
+ * Possible error messages:
+ *
+ * Invalid Bet: {bet amount} if the bet amount was not a valid integer (must be positive and below INT_MAX)
+ * Invalid Item Number: {item id} if the item id was not valid
+ * Insufficient Funds: {payout amount} if the final payout amount could not be fulfilled wit the bill dispenser's
+ *                     cash on hand
+ * No Payout: {item name} if the item name specified was not the winning item
+ */
 public class WagerCommand implements Command {
     private BillDispenser billDispenser;
     private AuctionItemManager auctionItemManager;
@@ -24,11 +36,17 @@ public class WagerCommand implements Command {
 
         String betAmountString = args.get(1);
 
-        if (!betAmountString.matches("^\\d+$")) {
+        int betAmount;
+
+        try {
+            betAmount = Integer.parseInt(betAmountString);
+        } catch (NumberFormatException nfe) {
             return "Invalid Bet: " + betAmountString;
         }
 
-        int betAmount = Integer.parseInt(betAmountString);
+        if (betAmount == 0) {
+            return "Invalid Bet: " + betAmountString;
+        }
 
         AuctionItem wageredItem = auctionItemManager.findById(wageredItemId);
 
