@@ -26,7 +26,7 @@ public class CommandRouter {
                     arguments.add(matcher.group(i));
                 }
 
-                return commandEntry.getValue().executeCommand(arguments);
+                return commandEntry.getValue().execute(arguments);
             }
         }
 

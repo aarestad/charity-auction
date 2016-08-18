@@ -4,7 +4,7 @@ import java.util.List;
 
 public class QuitCommand implements Command {
     @Override
-    public String executeCommand(List<String> args) {
+    public String execute(List<String> args) {
         System.exit(0);
         return null;
     }

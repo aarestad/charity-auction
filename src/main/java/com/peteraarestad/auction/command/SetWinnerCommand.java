@@ -16,7 +16,7 @@ public class SetWinnerCommand implements Command {
     }
 
     @Override
-    public String executeCommand(List<String> args) {
+    public String execute(List<String> args) {
         int winningItem = Integer.parseInt(args.get(0));
 
         AuctionItem wageredItem = auctionItemManager.findById(winningItem);
@@ -26,6 +26,6 @@ public class SetWinnerCommand implements Command {
         }
 
         auctionItemManager.setWinningItem(winningItem);
-        return new PrintStatusCommand(billDispenser, auctionItemManager).executeCommand(args);
+        return new PrintStatusCommand(billDispenser, auctionItemManager).execute(args);
     }
 }

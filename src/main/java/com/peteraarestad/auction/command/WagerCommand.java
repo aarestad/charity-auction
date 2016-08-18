@@ -19,7 +19,7 @@ public class WagerCommand implements Command {
     }
 
     @Override
-    public String executeCommand(List<String> args) {
+    public String execute(List<String> args) {
         int wageredItemId = Integer.parseInt(args.get(0));
 
         String betAmountString = args.get(1);
@@ -56,7 +56,7 @@ public class WagerCommand implements Command {
                         .append(numberOfBills != null ? numberOfBills : "0").append("\n");
             }
 
-            responseBuilder.append(new PrintStatusCommand(billDispenser, auctionItemManager).executeCommand(args));
+            responseBuilder.append(new PrintStatusCommand(billDispenser, auctionItemManager).execute(args));
 
             return responseBuilder.toString();
         }

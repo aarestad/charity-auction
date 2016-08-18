@@ -15,7 +15,7 @@ public class PrintStatusCommand implements Command {
     }
 
     @Override
-    public String executeCommand(List<String> args) {
+    public String execute(List<String> args) {
         return billDispenser.currentState() + "\n" + auctionItemManager.currentState();
     }
 }
