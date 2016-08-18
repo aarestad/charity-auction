@@ -17,8 +17,7 @@ import static com.peteraarestad.auction.repository.BillDispenser.BILL_DENOMINATI
  *
  * Invalid Bet: {bet amount} if the bet amount was not a valid integer (must be positive and below INT_MAX)
  * Invalid Item Number: {item id} if the item id was not valid
- * Insufficient Funds: {payout amount} if the final payout amount could not be fulfilled wit the bill dispenser's
- *                     cash on hand
+ * Insufficient Funds: {payout amount} if the final payout amount could not be fulfilled wit the bill dispenser's cash on hand
  * No Payout: {item name} if the item name specified was not the winning item
  */
 public class WagerCommand implements Command {
@@ -32,7 +31,19 @@ public class WagerCommand implements Command {
 
     @Override
     public String execute(List<String> args) {
-        int wageredItemId = Integer.parseInt(args.get(0));
+        int wageredItemId;
+
+        try {
+            wageredItemId = Integer.parseInt(args.get(0));
+        } catch (NumberFormatException nfe) {
+            return "Invalid Item Number: " + args.get(0) + "\n" + currentState();
+        }
+
+        AuctionItem wageredItem = auctionItemManager.findById(wageredItemId);
+
+        if (wageredItem == null) {
+            return "Invalid Item Number: " + wageredItemId + "\n" + currentState();
+        }
 
         String betAmountString = args.get(1);
 
@@ -41,17 +52,11 @@ public class WagerCommand implements Command {
         try {
             betAmount = Integer.parseInt(betAmountString);
         } catch (NumberFormatException nfe) {
-            return "Invalid Bet: " + betAmountString;
+            return "Invalid Bet: " + betAmountString + "\n" + currentState();
         }
 
         if (betAmount == 0) {
-            return "Invalid Bet: " + betAmountString;
-        }
-
-        AuctionItem wageredItem = auctionItemManager.findById(wageredItemId);
-
-        if (wageredItem == null) {
-            return "Invalid Item Number: " + wageredItemId;
+            return "Invalid Bet: " + betAmountString + "\n" + currentState();
         }
 
         if (wageredItem.equals(auctionItemManager.getWinningItem())) {
@@ -60,13 +65,12 @@ public class WagerCommand implements Command {
             SortedMap<Integer, Integer> payout = billDispenser.getPayout(amountWon);
 
             if (payout == null) {
-                return "Insufficient Funds: " + amountWon;
+                return "Insufficient Funds: $" + amountWon + "\n" + currentState();
             }
 
             StringBuilder responseBuilder = new StringBuilder();
 
-            responseBuilder.append("Payout: ").append(wageredItem.getName()).append(",$").append(amountWon).append("\n");
-
+            responseBuilder.append("Payout: ").append(wageredItem.getName()).append(", $").append(amountWon).append("\n");
             responseBuilder.append("Dispensing:\n");
 
             for (Integer denomination : BILL_DENOMINATIONS) {
@@ -76,11 +80,15 @@ public class WagerCommand implements Command {
                         .append(numberOfBills != null ? numberOfBills : "0").append("\n");
             }
 
-            responseBuilder.append(new CurrentStateCommand(billDispenser, auctionItemManager).execute(args));
+            responseBuilder.append(currentState());
 
             return responseBuilder.toString();
         }
 
-        return "No Payout: " + wageredItem.getName();
+        return "No Payout: " + wageredItem.getName() + "\n" + currentState();
+    }
+
+    private String currentState() {
+        return new CurrentStateCommand(billDispenser, auctionItemManager).execute(null);
     }
 }

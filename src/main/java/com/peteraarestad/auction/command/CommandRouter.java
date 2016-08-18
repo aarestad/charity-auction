@@ -1,5 +1,7 @@
 package com.peteraarestad.auction.command;
 
+import com.google.common.base.Preconditions;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +36,8 @@ public class CommandRouter {
      * @return the result of the command or an error message
      */
     public String parseAndExecuteCommand(String commandInput) {
+        Preconditions.checkNotNull(commandInput, "command input cannot be null");
+
         for (Map.Entry<String, Command> commandEntry : router.entrySet()) {
             Matcher matcher = Pattern.compile(commandEntry.getKey()).matcher(commandInput);
 

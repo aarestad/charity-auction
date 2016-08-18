@@ -13,6 +13,7 @@ public class AuctionItemManager {
     // since the items are already sorted by primary key for us)
     private final SortedMap<Integer, AuctionItem> auctionItemRepository = new TreeMap<>();
 
+    // The winning item's ID
     private int winningItem;
 
     /**

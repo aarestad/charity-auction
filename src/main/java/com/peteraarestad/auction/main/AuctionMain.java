@@ -43,13 +43,13 @@ public class AuctionMain {
         commandRouter = new CommandRouter();
 
         // Command input: "Q" or "q" only
-        commandRouter.addRoute("(?i)^q$", new QuitCommand());
+        commandRouter.addRoute("^[Qq]$", new QuitCommand());
 
         // Command input: "R" or "r" only
-        commandRouter.addRoute("(?i)^r$", new RestockCommand(billDispenser, auctionItemManager));
+        commandRouter.addRoute("^[Rr]$", new RestockCommand(billDispenser, auctionItemManager));
 
         // Command input: "W" or "w" followed by an integer
-        commandRouter.addRoute("(?i)^w\\s+(\\d+)$", new SetWinnerCommand(billDispenser, auctionItemManager));
+        commandRouter.addRoute("^[Ww]\\s+(\\d+)$", new SetWinnerCommand(billDispenser, auctionItemManager));
 
         // Command input: an integer followed by another non-whitespace token
         commandRouter.addRoute("^(\\d+)\\s+(.+)$", new WagerCommand(billDispenser, auctionItemManager));

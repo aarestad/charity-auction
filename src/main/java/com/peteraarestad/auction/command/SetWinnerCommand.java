@@ -21,15 +21,25 @@ public class SetWinnerCommand implements Command {
 
     @Override
     public String execute(List<String> args) {
-        int winningItem = Integer.parseInt(args.get(0));
+        int winningItem;
+
+        try {
+            winningItem = Integer.parseInt(args.get(0));
+        } catch (NumberFormatException nfe) {
+            return "Invalid Item Number: " + args.get(0) + "\n" + currentState();
+        }
 
         AuctionItem wageredItem = auctionItemManager.findById(winningItem);
 
         if (wageredItem == null) {
-            return "Invalid Item Number: " + winningItem;
+            return "Invalid Item Number: " + winningItem + "\n" + currentState();
         }
 
         auctionItemManager.setWinningItem(winningItem);
-        return new CurrentStateCommand(billDispenser, auctionItemManager).execute(args);
+        return currentState();
+    }
+
+    private String currentState() {
+        return new CurrentStateCommand(billDispenser, auctionItemManager).execute(null);
     }
 }
