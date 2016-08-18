@@ -18,10 +18,6 @@ public class AuctionItemManager {
         auctionItemRepository.put(auctionItem.getId(), auctionItem);
     }
 
-    public void remove(AuctionItem auctionItem) {
-        auctionItemRepository.remove(auctionItem.getId());
-    }
-
     public void setWinningItem(int winningItem) {
         this.winningItem = winningItem;
     }
