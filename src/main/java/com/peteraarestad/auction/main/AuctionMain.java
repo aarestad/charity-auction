@@ -12,6 +12,11 @@ import java.io.InputStreamReader;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.System.out;
 
+/**
+ * The main driver of the auction app. Application configuration is done in the <code>static</code> block. The main method
+ * prints the initial state of the dispenser and manager, and then processes each command, one per line. "Qq" or ctrl-C
+ * will exit the program.
+ */
 public class AuctionMain {
     private static final AuctionItemManager auctionItemManager;
     private static final BillDispenser billDispenser;
@@ -20,6 +25,7 @@ public class AuctionMain {
     static {
         auctionItemManager = new AuctionItemManager();
 
+        // Initialize the items and the initial winning item
         auctionItemManager.saveOrUpdate(new AuctionItem(1, "XBox", 5));
         auctionItemManager.saveOrUpdate(new AuctionItem(2, "iPhone", 10));
         auctionItemManager.saveOrUpdate(new AuctionItem(3, "iPad", 9));
@@ -27,16 +33,25 @@ public class AuctionMain {
         auctionItemManager.saveOrUpdate(new AuctionItem(5, "Roku", 3));
         auctionItemManager.saveOrUpdate(new AuctionItem(6, "Keurig", 5));
         auctionItemManager.saveOrUpdate(new AuctionItem(7, "Walkman", 6));
-
         auctionItemManager.setWinningItem(1);
 
         billDispenser = new BillDispenser();
+
+        // Initialize the dispenser
         billDispenser.restockInventory();
 
         commandRouter = new CommandRouter();
+
+        // Command input: "Q" or "q" only
         commandRouter.addRoute("(?i)^q$", new QuitCommand());
+
+        // Command input: "R" or "r" only
         commandRouter.addRoute("(?i)^r$", new RestockCommand(billDispenser, auctionItemManager));
+
+        // Command input: "W" or "w" followed by an integer
         commandRouter.addRoute("(?i)^w\\s+(\\d+)$", new SetWinnerCommand(billDispenser, auctionItemManager));
+
+        // Command input: an integer followed by another non-whitespace token
         commandRouter.addRoute("^(\\d+)\\s+(.+)$", new WagerCommand(billDispenser, auctionItemManager));
     }
 
