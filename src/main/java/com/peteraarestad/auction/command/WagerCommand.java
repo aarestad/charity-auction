@@ -65,7 +65,9 @@ public class WagerCommand implements Command {
 
             StringBuilder responseBuilder = new StringBuilder();
 
-            responseBuilder.append("Payout: ").append(wageredItem.getName()).append(",").append(amountWon).append("\n");
+            responseBuilder.append("Payout: ").append(wageredItem.getName()).append(",$").append(amountWon).append("\n");
+
+            responseBuilder.append("Dispensing:\n");
 
             for (Integer denomination : BILL_DENOMINATIONS) {
                 Integer numberOfBills = payout.get(denomination);
