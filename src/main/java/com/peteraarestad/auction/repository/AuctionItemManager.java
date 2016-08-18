@@ -10,7 +10,7 @@ import java.util.TreeMap;
  */
 public class AuctionItemManager {
     // The auction item repository. (Impl note: we use a SortedMap because it makes printing the current state easier
-    // since the items are already sorted by their primary key for us)
+    // since the items are already sorted by primary key for us)
     private final SortedMap<Integer, AuctionItem> auctionItemRepository = new TreeMap<>();
 
     private int winningItem;
