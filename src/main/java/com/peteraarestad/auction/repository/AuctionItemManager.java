@@ -5,7 +5,7 @@ import com.peteraarestad.auction.model.AuctionItem;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-public class AuctionItemRepository {
+public class AuctionItemManager {
     private final SortedMap<Integer, AuctionItem> auctionItemRepository = new TreeMap<>();
 
     private int winningItem;
