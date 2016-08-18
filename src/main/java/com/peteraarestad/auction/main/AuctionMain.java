@@ -44,7 +44,7 @@ public class AuctionMain {
     }
 
     public static void main(String... args) {
-        out.println(new PrintStatusCommand(billDispenser, auctionItemManager).execute(newArrayList()));
+        out.println(new CurrentStateCommand(billDispenser, auctionItemManager).execute(newArrayList()));
 
         try {
             BufferedReader buf = new BufferedReader(new InputStreamReader(System.in));
