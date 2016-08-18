@@ -29,10 +29,10 @@ public class BillDispenser {
             if (numOfBills > 0) {
                 int billsInInventory = billInventory.get(denomination);
 
-                if (billsInInventory >= numOfBills) {
-                    payout.put(denomination, numOfBills);
-                    amountLeftToPay -= denomination * numOfBills;
-                }
+                int billsToWithdraw = Math.min(billsInInventory, numOfBills);
+
+                payout.put(denomination, billsToWithdraw);
+                amountLeftToPay -= denomination * billsToWithdraw;
             }
         }
 
