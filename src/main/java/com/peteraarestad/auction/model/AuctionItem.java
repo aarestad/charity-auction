@@ -1,10 +1,22 @@
 package com.peteraarestad.auction.model;
 
+/**
+ * An auction item. Immutable.
+ */
 public class AuctionItem {
+    /**
+     * The item's ID
+     */
     private final int id;
 
+    /**
+     * The item's name
+     */
     private final String name;
 
+    /**
+     * The item's "odds" used to calculate its payout
+     */
     private final int odds;
 
     public AuctionItem(int id, String name, int odds) {
