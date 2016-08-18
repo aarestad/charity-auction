@@ -26,8 +26,8 @@ public class AuctionItemRepository {
         this.winningItem = winningItem;
     }
 
-    public int getWinningItem() {
-        return winningItem;
+    public AuctionItem getWinningItem() {
+        return auctionItemRepository.get(winningItem);
     }
 
     public String currentState() {

@@ -10,6 +10,8 @@ import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.lang.System.out;
+
 public class AuctionMain {
     private static final AuctionItemRepository auctionItemRepository;
 
@@ -24,17 +26,15 @@ public class AuctionMain {
         initializeAuctionItemRepo(auctionItemRepository);
         billDispenser = new BillDispenser();
 
-        setWinningNumberCommand = Pattern.compile("^w\\s+(\\d+)$(?i)");
+        setWinningNumberCommand = Pattern.compile("^[Ww]\\s+(\\d+)$");
         wagerCommand = Pattern.compile("^(\\d+)\\s+(.+)$");
     }
 
     public static void main(String... args) {
-        System.out.println(billDispenser.currentState());
-        System.out.println(auctionItemRepository.currentState());
+        printStatus();
 
         try {
-            InputStreamReader inR = new InputStreamReader(System.in);
-            BufferedReader buf = new BufferedReader(inR);
+            BufferedReader buf = new BufferedReader(new InputStreamReader(System.in));
             String line;
 
             while ((line = buf.readLine()) != null) {
@@ -46,6 +46,11 @@ public class AuctionMain {
         }
     }
 
+    private static void printStatus() {
+        out.println(billDispenser.currentState());
+        out.println(auctionItemRepository.currentState());
+    }
+
     private static void parseAndExecuteCommand(String command) {
         if (command.equalsIgnoreCase("q")) {
             System.exit(0);
@@ -53,6 +58,7 @@ public class AuctionMain {
 
         if (command.equalsIgnoreCase("r")) {
             billDispenser.restockInventory();
+            printStatus();
             return;
         }
 
@@ -60,32 +66,57 @@ public class AuctionMain {
 
         if (winningNumberCommandMatcher.matches()) {
             int winningItem = Integer.parseInt(winningNumberCommandMatcher.group(1));
+
+            AuctionItem wageredItem = auctionItemRepository.findById(winningItem);
+
+            if (wageredItem == null) {
+                out.println("Invalid Item Number: " + winningItem);
+                return;
+            }
+
             auctionItemRepository.setWinningItem(winningItem);
+            printStatus();
             return;
         }
 
         Matcher wagerCommandMatcher = wagerCommand.matcher(command);
 
         if (wagerCommandMatcher.matches()) {
-            int wageredItem = Integer.parseInt(wagerCommandMatcher.group(1));
+            int wageredItemId = Integer.parseInt(wagerCommandMatcher.group(1));
 
             String betAmountString = wagerCommandMatcher.group(2);
 
             if (!betAmountString.matches("^\\d+$")) {
-                System.out.println("Invalid bet: " + betAmountString);
+                out.println("Invalid Bet: " + betAmountString);
                 return;
             }
 
             int betAmount = Integer.parseInt(betAmountString);
 
-            if (wageredItem == auctionItemRepository.getWinningItem()) {
-                AuctionItem wonItem = auctionItemRepository.findById(wageredItem);
-                
-                int amountWon = betAmount * wonItem.getOdds();
 
-                System.out.println("Payout: " + wonItem.getName() + ", " + amountWon);
+            AuctionItem wageredItem = auctionItemRepository.findById(wageredItemId);
+
+            if (wageredItem == null) {
+                out.println("Invalid Item Number: " + wageredItemId);
+                return;
+            }
+
+            if (wageredItem.equals(auctionItemRepository.getWinningItem())) {
+                int amountWon = betAmount * wageredItem.getOdds();
+
+                out.println("Payout: " + wageredItem.getName() + "," + amountWon);
+                // TODO payout
+                // TODO print "insufficient funds" if payout not possible
+                printStatus();
+                return;
+            } else {
+                out.println("No Payout: " + wageredItem.getName());
+                printStatus();
+                return;
             }
         }
+
+        out.println("Invalid Command: " + command);
     }
 
     private static void initializeAuctionItemRepo(AuctionItemRepository auctionItemRepository) {
