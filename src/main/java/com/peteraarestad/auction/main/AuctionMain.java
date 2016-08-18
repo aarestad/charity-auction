@@ -19,19 +19,7 @@ public class AuctionMain {
 
     static {
         auctionItemManager = new AuctionItemManager();
-        initializeAuctionItemManager(auctionItemManager);
 
-        billDispenser = new BillDispenser();
-        billDispenser.restockInventory();
-
-        commandRouter = new CommandRouter();
-        commandRouter.addRoute("(?i)^q$", new QuitCommand());
-        commandRouter.addRoute("(?i)^r$", new RestockCommand(billDispenser, auctionItemManager));
-        commandRouter.addRoute("(?i)^w\\s+(\\d+)$", new SetWinnerCommand(billDispenser, auctionItemManager));
-        commandRouter.addRoute("^(\\d+)\\s+(.+)$", new WagerCommand(billDispenser, auctionItemManager));
-    }
-
-    private static void initializeAuctionItemManager(AuctionItemManager auctionItemManager) {
         auctionItemManager.saveOrUpdate(new AuctionItem(1, "XBox", 5));
         auctionItemManager.saveOrUpdate(new AuctionItem(2, "iPhone", 10));
         auctionItemManager.saveOrUpdate(new AuctionItem(3, "iPad", 9));
@@ -41,6 +29,15 @@ public class AuctionMain {
         auctionItemManager.saveOrUpdate(new AuctionItem(7, "Walkman", 6));
 
         auctionItemManager.setWinningItem(1);
+
+        billDispenser = new BillDispenser();
+        billDispenser.restockInventory();
+
+        commandRouter = new CommandRouter();
+        commandRouter.addRoute("(?i)^q$", new QuitCommand());
+        commandRouter.addRoute("(?i)^r$", new RestockCommand(billDispenser, auctionItemManager));
+        commandRouter.addRoute("(?i)^w\\s+(\\d+)$", new SetWinnerCommand(billDispenser, auctionItemManager));
+        commandRouter.addRoute("^(\\d+)\\s+(.+)$", new WagerCommand(billDispenser, auctionItemManager));
     }
 
     public static void main(String... args) {
