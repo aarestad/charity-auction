@@ -1,10 +1,8 @@
 To run the app
 --------------
-- ensure [Gradle](http://www.gradle.org) is installed on your machine
-
-- `gradle -q run`
+- `./gradlew -q run` (or `./gradlew.bat -q run on Windows`)
 
 To run tests
 ------------
 
-- `gradle test`
+- `./gradlew test`
