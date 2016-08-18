@@ -56,7 +56,7 @@ public class WagerCommand implements Command {
                         .append(numberOfBills != null ? numberOfBills : "0").append("\n");
             }
 
-            responseBuilder.append(new PrintStatusCommand(billDispenser, auctionItemManager).execute(args));
+            responseBuilder.append(new CurrentStateCommand(billDispenser, auctionItemManager).execute(args));
 
             return responseBuilder.toString();
         }

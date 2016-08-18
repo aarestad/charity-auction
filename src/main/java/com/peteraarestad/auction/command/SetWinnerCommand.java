@@ -26,6 +26,6 @@ public class SetWinnerCommand implements Command {
         }
 
         auctionItemManager.setWinningItem(winningItem);
-        return new PrintStatusCommand(billDispenser, auctionItemManager).execute(args);
+        return new CurrentStateCommand(billDispenser, auctionItemManager).execute(args);
     }
 }

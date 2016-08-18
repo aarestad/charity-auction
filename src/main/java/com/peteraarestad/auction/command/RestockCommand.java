@@ -18,6 +18,6 @@ public class RestockCommand implements Command {
     public String execute(List<String> args) {
         billDispenser.restockInventory();
 
-        return new PrintStatusCommand(billDispenser, auctionItemManager).execute(args);
+        return new CurrentStateCommand(billDispenser, auctionItemManager).execute(args);
     }
 }
