@@ -5,6 +5,7 @@ import com.peteraarestad.auction.repository.AuctionItemManager;
 import com.peteraarestad.auction.repository.BillDispenser;
 
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
 
 import static com.peteraarestad.auction.repository.BillDispenser.BILL_DENOMINATIONS;
@@ -62,7 +63,7 @@ public class WagerCommand implements Command {
         if (wageredItem.equals(auctionItemManager.getWinningItem())) {
             int amountWon = betAmount * wageredItem.getOdds();
 
-            SortedMap<Integer, Integer> payout = billDispenser.getPayout(amountWon);
+            Map<Integer, Integer> payout = billDispenser.getPayout(amountWon);
 
             if (payout == null) {
                 return "Insufficient Funds: $" + amountWon + "\n" + currentState();
